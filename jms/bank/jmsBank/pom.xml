@@ -64,6 +64,11 @@
 	</properties>
 
 	<dependencies>
+		<dependency>
+			<groupId>de.hs.furtwangen.bam.bi</groupId>
+			<artifactId>jmsJavaClient</artifactId>
+			<version>SNAPSHOT-0.0.1</version>
+		</dependency>
 
 		<!-- SPRING, SPRING, SPRINGITY SPRING -->
 		<dependency>
@@ -296,8 +301,6 @@
 			<version>${jetty.version}</version>
 		</dependency>
 
-
-
 	</dependencies>
 
 	<build>
@@ -349,7 +352,7 @@
 								<include>**/*.jar</include>
 							</includes>
 						</resource>
-					</webResources> 
+					</webResources>
 				</configuration>
 			</plugin>
 

@@ -5,17 +5,16 @@ import java.util.Properties;
 
 import javax.annotation.Resource;
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl;
+import org.apache.qpid.amqp_1_0.jms.impl.TopicImpl;
 import org.springframework.stereotype.Component;
 
 /**
@@ -35,19 +34,23 @@ public class MsgSender {
 
 	public void registerNewMessageSender() throws NamingException, JMSException {
 
-		// Hashtable properties = new JMSUtils().getProperties();
-		Context context = new InitialContext(configProperties);
+		String apollo_host = configProperties.getProperty("APOLLO_HOST");
+		int apollo_port = Integer.parseInt(configProperties
+				.getProperty("APOLLO_PORT"));
+		String apollo_user = configProperties.getProperty("APOLLO_USER");
+		String apollo_password = configProperties
+				.getProperty("APOLLO_PASSWORD");
 
-		ConnectionFactory factory = (ConnectionFactory) context
-				.lookup(configProperties.getProperty("CONNECTION_FACTORY"));
+		ConnectionFactoryImpl factory = new ConnectionFactoryImpl(apollo_host,
+				apollo_port, apollo_user, apollo_password);
 
 		// Create Connection
 		Connection connection = factory.createConnection();
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 		// Destination is a topic
-		Destination destination = (Destination) context.lookup(configProperties
-				.getProperty("SENDER_TOPIC"));
+		Destination destination = new TopicImpl("topic://"
+				+ configProperties.getProperty("SENDER_TOPIC"));
 
 		// Create Consumer
 		msgProducer = session.createProducer(destination);

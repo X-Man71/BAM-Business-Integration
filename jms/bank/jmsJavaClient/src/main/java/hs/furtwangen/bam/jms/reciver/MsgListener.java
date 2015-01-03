@@ -3,10 +3,9 @@ package hs.furtwangen.bam.jms.reciver;
 import hs.furtwangen.bam.jms.util.JMSUtils;
 
 import java.io.Serializable;
-import java.util.Hashtable;
+import java.util.Map;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
@@ -15,11 +14,12 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
 import javax.jms.TextMessage;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 import jms.model.AResponse;
+
+import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl;
+import org.apache.qpid.amqp_1_0.jms.impl.TopicImpl;
 
 
 public class MsgListener implements MessageListener {
@@ -60,22 +60,25 @@ public class MsgListener implements MessageListener {
 	static void registerNewMessageListener() throws NamingException,
 	JMSException {
 		
-		Hashtable<String,String> properties = JMSUtils.getProperties();
+		Map<String, String> properties = JMSUtils.getProperties();
+		String apollo_host = properties.get(JMSUtils.APOLLO_HOST);
+		int apollo_port = Integer.parseInt(properties.get(JMSUtils.APOLLO_PORT));
+		String apollo_user = properties.get(JMSUtils.APOLLO_USER);
+		String apollo_password = properties.get(JMSUtils.APOLLO_PASSWORD);
 
-		Context context = new InitialContext(properties);
-
-		ConnectionFactory factory = (ConnectionFactory) context
-				.lookup(properties.get(JMSUtils.CONNECTION_FACTORY).toString());
+		ConnectionFactoryImpl factory = new ConnectionFactoryImpl(apollo_host,
+				apollo_port, apollo_user, apollo_password);
 
 		// Create Connection
 		Connection connection = factory.createConnection();
 		Session session = connection.createSession(false,
 				Session.AUTO_ACKNOWLEDGE);
+		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 		// Destination is a topic
-		Destination destination = (Destination) context.lookup(properties.get(
-				JMSUtils.LISTENER_TOPIC).toString());
-
+		Destination destination = new TopicImpl("topic://"
+				+ properties.get(JMSUtils.LISTENER_TOPIC).toString());
+	
 		// Create Consumer
 		MessageConsumer msgListener = session.createConsumer(destination);
 		msgListener.setMessageListener(new MsgListener());

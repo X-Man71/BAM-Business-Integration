@@ -20,7 +20,7 @@ public class TestSender {
 		aRequest.setRequestId(UUID.randomUUID().toString());
 		aRequest.setTerm(6);
 		
-		MsgSender.getInstance().sendObjectMessage(aRequest);
+		MsgSender.getInstance().sendTextMessage(aRequest);
 		System.out.println("Message send!");
 		System.exit(0);
 	}

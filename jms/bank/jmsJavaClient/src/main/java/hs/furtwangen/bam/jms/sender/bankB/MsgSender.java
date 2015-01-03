@@ -3,18 +3,18 @@ package hs.furtwangen.bam.jms.sender.bankB;
 import hs.furtwangen.bam.jms.util.JMSUtils;
 
 import java.io.Serializable;
-import java.util.Hashtable;
+import java.util.Map;
 
 import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
 import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.MessageProducer;
 import javax.jms.ObjectMessage;
 import javax.jms.Session;
-import javax.naming.Context;
-import javax.naming.InitialContext;
 import javax.naming.NamingException;
+
+import org.apache.qpid.amqp_1_0.jms.impl.ConnectionFactoryImpl;
+import org.apache.qpid.amqp_1_0.jms.impl.TopicImpl;
 
 public class MsgSender {
 
@@ -39,20 +39,22 @@ public class MsgSender {
 	private void registerNewMessageSender() throws NamingException,
 			JMSException {
 		
-		Hashtable<String,String> properties = JMSUtils.getProperties();
+		Map<String, String> properties = JMSUtils.getProperties();
+		String apollo_host = properties.get(JMSUtils.APOLLO_HOST);
+		int apollo_port = Integer.parseInt(properties.get(JMSUtils.APOLLO_PORT));
+		String apollo_user = properties.get(JMSUtils.APOLLO_USER);
+		String apollo_password = properties.get(JMSUtils.APOLLO_PASSWORD);
 
-		Context context = new InitialContext(properties);
-
-		ConnectionFactory factory = (ConnectionFactory) context
-				.lookup(properties.get(JMSUtils.CONNECTION_FACTORY).toString());
+		ConnectionFactoryImpl factory = new ConnectionFactoryImpl(apollo_host,
+				apollo_port, apollo_user, apollo_password);
 
 		// Create Connection
 		Connection connection = factory.createConnection();
 		session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
 		// Destination is a topic
-		Destination destination = (Destination) context.lookup(properties.get(
-				JMSUtils.SENDER_TOPIC_B).toString());
+		Destination destination = new TopicImpl("topic://"
+				+ properties.get(JMSUtils.SENDER_TOPIC_B).toString());	
 
 		// Create Consumer
 		msgProducer = session.createProducer(destination);
@@ -61,7 +63,7 @@ public class MsgSender {
 		connection.start();
 	}
 	
-	public void sendObjectMessage(Serializable aRequest) throws JMSException {
+	public void sendTextMessage(Serializable aRequest) throws JMSException {
 		ObjectMessage objectMessage = session.createObjectMessage(aRequest);
 		msgProducer.send(objectMessage);
 	}

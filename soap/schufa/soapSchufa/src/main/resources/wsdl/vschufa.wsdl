@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="VSchufaService" targetNamespace="http://vschufa.hfu.de/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://vschufa.hfu.de/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <schema xmlns="http://www.w3.org/2001/XMLSchema">
+<import namespace="http://vschufa.hfu.de/" schemaLocation="vschufa_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="getScoreValue">
+    <wsdl:part name="parameters" element="tns:getScoreValue">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getScoreValueResponse">
+    <wsdl:part name="parameters" element="tns:getScoreValueResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IVSchufa">
+    <wsdl:operation name="getScoreValue">
+      <wsdl:input name="getScoreValue" message="tns:getScoreValue">
+    </wsdl:input>
+      <wsdl:output name="getScoreValueResponse" message="tns:getScoreValueResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="VSchufaServiceSoapBinding" type="tns:IVSchufa">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getScoreValue">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getScoreValue">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getScoreValueResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="VSchufaService">
+    <wsdl:port name="VSchufaPort" binding="tns:VSchufaServiceSoapBinding">
+      <soap:address location="http://localhost:8080/VSchufaService/services/VSchufaPort"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

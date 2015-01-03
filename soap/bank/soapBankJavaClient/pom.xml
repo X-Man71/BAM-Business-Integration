@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>de.hs.furtwangen.bam.bi</groupId>
+		<artifactId>soap.bank</artifactId>
+		<version>SNAPSHOT-0.0.1</version>
+	</parent>
+
+	<artifactId>soapBankJavaClient</artifactId>
+	<packaging>jar</packaging>
+
+	<properties>
+
+		<!-- Generic properties -->
+		<java.version>1.8</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+	</properties>
+
+	<dependencies>
+	
+		
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<compilerArguments>
+						<Xlint />
+					</compilerArguments>
+					<verbose>true</verbose>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<showWarnings>true</showWarnings>
+					<encoding>${project.build.sourceEncoding}</encoding>
+					<sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
+				</configuration>
+			</plugin>
+			</plugins>
+			
+	</build>
+</project>

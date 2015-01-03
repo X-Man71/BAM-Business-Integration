@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+	lang="en">
+
+<head>
+<title th:text="${bankName}+' - valid Requests'"></title>
+
+  <link rel="stylesheet" media="screen" href="/public/stylesheets/main.css"></link>
+   <script src="/public/javascripts/jquery-1.5.2.min.js" type="text/javascript"></script>
+
+</head>
+<body>
+
+<fieldset>
+	<legend>Request</legend>
+	<table>
+	<tbody>
+		<tr>
+			<td>RequestId:</td>
+			<td th:text="${request.requestId}"></td>
+		</tr>
+		<tr>
+			<td>Amount:</td>
+			<td th:text="${request.amount}"></td>
+		</tr>
+		<tr>
+			<td>Term:</td>
+			<td th:text="${request.term}"></td>
+		</tr>
+		<tr>
+			<td>ConsumerRate:</td>
+			<td th:text="${request.consumerRate}"></td>
+		</tr>
+		<tr>
+			<td>RequestDeadline:</td>
+			<td th:text="${request.requestDeadline}"></td>
+		</tr>
+		<tr>
+			<td colspan="2"><hr /></td>
+		</tr>
+		
+		<form action="#" th:action="@{/edit}" method="post">
+		<tr>
+			<td th:if="${error}" colspan="2" style="color: red" th:text="${error}"></td>
+		</tr>
+
+		<tr>
+			<td>QuotedRate:</td>
+			<td>
+					<input type="text" id="quoteRate" name="quoteRate" /> %
+					<input type="hidden" id="requestId" name="requestId" th:value="${request.requestId}" />
+				
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2"><input type="submit" value="Accept" /></td>
+		</tr>
+		</form>
+		#{/form}
+	</tbody>
+</table>
+</fieldset>
+</body>
+</html>
